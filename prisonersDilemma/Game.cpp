@@ -17,6 +17,38 @@ void Game::round()
     
 }
 
+
+std::vector<Game::Pair_t> Game::generatePairs()
+{
+    
+    std::vector<Player*> pop = population;
+    
+    std::vector<Pair_t> pairs;
+    
+    long num_pairs = pop.size() / 2;
+    
+    for (int i = 0; i < num_pairs; i++)
+    {
+        int random_index = rand() % pop.size();
+        Player *Player1 = pop[random_index];
+        pop.erase(pop.begin() + random_index);
+        
+        random_index = rand() % pop.size();
+        Player *Player2 = pop[random_index];
+        pop.erase(pop.begin() + random_index);
+        
+    
+        Pair_t pair = { Player1, Player2 };
+        
+        pairs.push_back(pair);
+        
+    }
+    
+    return pairs;
+    
+}
+
+
 void Game::generatePlayers(PlayerConfig *pc)
 {
     
@@ -26,15 +58,16 @@ void Game::generatePlayers(PlayerConfig *pc)
         for (int j = 0; j < pc->titfortatcoop; j++)
         {
 
-            Player *p = new Player(Player::TIT_FOR_TAT_COOP);
+            Strategy *strat = new TitForTatCoop();
+            Player *p = new Player(strat);
             population.push_back(p);
             
         }
         
         for (int j = 0; j < pc->titfortatdefect; j++)
         {
-            
-            Player *p = new Player(Player::TIT_FOR_TAT_DEFECT);
+//            Strategy *strat = new TitForTatCoop();
+            Player *p = new Player();
             population.push_back(p);
             
         }

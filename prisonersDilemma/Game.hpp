@@ -24,6 +24,8 @@ class Game
     
 public:
     
+    typedef std::tuple<Player*, Player*> Pair_t;
+    
     Game() {};
     
     ~Game() {};
@@ -40,7 +42,7 @@ public:
     }PlayerConfig;
     
     void generatePlayers(PlayerConfig *pc);
-
+    std::vector<Pair_t> generatePairs();
 
 };
 

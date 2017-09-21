@@ -9,14 +9,22 @@
 #include "Strategy.hpp"
 
 
-
-TitForTat::Action decision()
+TitForTatCoop::Action decision(Strategy::Action a)
 {
     
     // logic for tit for tat
     
-    
-    
-    return Strategy::DEFECT;
+    if (a == Strategy::DEFECT)
+    {
+        return Strategy::DEFECT;
+    }
+    else if (a == Strategy::COOPERATE)
+    {
+        return Strategy::COOPERATE;
+    }
+    else
+    {
+        return Strategy::COOPERATE;
+    }
     
 }

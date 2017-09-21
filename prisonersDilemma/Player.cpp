@@ -9,6 +9,21 @@
 #include "Player.hpp"
 
 
+void Player::move(Player *opponent)
+{
+    opponent->interaction_history = strategy->decision(opponent->interaction_history);
+    
+    if (opponent->interaction_history == Strategy::DEFECT)
+    {
+        defect();
+    }
+    else if (opponent->interaction_history == Strategy::COOPERATE)
+    {
+        cooperate(opponent);
+    }
+}
+
+
 void Player::defect()
 {
     

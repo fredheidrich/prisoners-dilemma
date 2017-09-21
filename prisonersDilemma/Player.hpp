@@ -18,12 +18,12 @@ class Player
     
     
     void defect();
-    void cooperate(Player *opponent);
+    void cooperate(Player*);
     
 public:
     
     
-
+    void move(Player*);
     
 //    enum Strategy
 //    {
@@ -31,18 +31,20 @@ public:
 //        TIT_FOR_TAT_DEFECT
 //    };
     
-    Strategy::Action lastAction;
+    Strategy::Action memory;
+    Strategy::Action interaction_history;
     
-    
-    Player(int strategy) : strategy(strategy) {};
+    Player() {};
+    Player(Strategy *strategy) : strategy(strategy) {};
     
     ~Player();
     
     
     int score;
     
+    Strategy *strategy;
     
-    int strategy;
+//    int strategy;
 };
 
 

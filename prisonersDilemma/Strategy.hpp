@@ -17,23 +17,31 @@ class Strategy
     
 public:
     
+    Strategy() {};
+    ~Strategy() {};
+    
     enum Action
     {
-        DEFECT = 0,
+        NONE = 0,
+        DEFECT,
         COOPERATE
     };
     
-    virtual Action decision() = 0;
+//    virtual Action decision(Action a) = 0;
     
 };
 
 
 
-class TitForTat : public Strategy
+class TitForTatCoop : public Strategy
 {
     
+public:
+    TitForTatCoop() {};
+    ~TitForTatCoop() {};
+
     
-    virtual Action decision();
+    Action decision(Action a);
 };
 
 #endif /* Strategy_hpp */
