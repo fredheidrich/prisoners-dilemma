@@ -31,6 +31,14 @@ public:
 };
 
 
+class TitForTatDefect : public Strategy {
+  
+public:
+  virtual Interaction decision(Interaction i) { return (i == COOPERATE) ? COOPERATE : DEFECT; };
+  
+};
+
+
 class TitForTatCoop : public Strategy {
     
 public:

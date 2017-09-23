@@ -17,13 +17,15 @@
 class Game
 {
   
-  void round();
+  void Round(int8_t);
+  
+  void PrintStats();
   
   std::vector<Player*> population;
   
 public:
   
-  void Play(int rounds);
+  void Play(int, int8_t);
   
   typedef std::tuple<Player*, Player*> Pair_t;
   

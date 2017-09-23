@@ -42,17 +42,19 @@ int main(int argc, const char * argv[]) {
   
   Game::PlayerConfig pc = {
       .titfortatcoop = 4,
-//      .titfortatdefect = 3,
+      .titfortatdefect = 4,
   };
+  
+  // TODO(fred): make sure player num is devidable by 2
+  // we need this for pairing up players two and two
 
   Game game;
   game.generatePlayers(&pc);
   
   int rounds = 1;
+  int8_t probability = 75;
   
-  game.Play(rounds);
+  game.Play(rounds, probability);
   
-  
-//  std::cout << "Hello, World!\n";
   return 0;
 }

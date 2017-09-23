@@ -16,14 +16,16 @@
 
 class Player {
   
-  void defect();
-  void cooperate(Player*);
+  
+  void Defect();
+  void Cooperate(Player*);
     
 public:
   
+  void Print();
 //  Player() : score(0) {};
   
-  void move(Player*);
+  void Move(Player*);
 
   Interaction memory;
   Interaction interaction_history;
@@ -31,7 +33,7 @@ public:
 //  Player(Strategy *strategy) : strategy(strategy) {};
   
   int score = 0;
-  
+  const char *name = "";
   Strategy *strategy;
 
 };

@@ -6,14 +6,21 @@
 //  Copyright © 2017 bitslice. All rights reserved.
 //
 
+#include <iostream>
+
 #include "player.h"
 
 
-void Player::move(Player *opponent) {
+void Player::Print() {
+  std::cout << name << ": " << score << std::endl;
+}
+
+
+void Player::Move(Player *opponent) {
   
   opponent->interaction_history = strategy->decision(opponent->interaction_history);
   
-  (opponent->interaction_history == DEFECT) ? defect() : cooperate(opponent);
+  (opponent->interaction_history == DEFECT) ? Defect() : Cooperate(opponent);
   
 //  if (opponent->interaction_history == DEFECT) {
 //    defect();
@@ -24,13 +31,13 @@ void Player::move(Player *opponent) {
 }
 
 
-void Player::defect() {
+void Player::Defect() {
   
   score += 1;
 
 }
 
-void Player::cooperate(Player *opponent) {
+void Player::Cooperate(Player *opponent) {
   
   opponent->score += 3;
   score -= 1;
