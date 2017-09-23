@@ -9,67 +9,50 @@
 #include <iostream>
 #include <map>
 
-#include "Game.hpp"
+#include "game.h"
+
+// Abstract class
+class Base {
+public:
+  virtual void func() = 0;
+};
+
+class Derived: public Base {
+public:
+  virtual void func() { std::cout << "hello" << std::endl; }
+};
+
+class C {
+public:
+  Base *a;
+};
+
+
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    
+  
+//  C *c = new C;
+//
+//  Derived d;
+//  c->a = &d;
+//
+//  c->a->func(); // returns hello
+  
+  
+  
+  Game::PlayerConfig pc = {
+      .titfortatcoop = 4,
+//      .titfortatdefect = 3,
+  };
 
-    
-    Game::PlayerConfig pc = {
-        .titfortatcoop = 3,
-        .titfortatdefect = 3,
-    };
-
-
-    
-//    std::map<Player::Strategy, int> m_pc;
-    
-    
-    
-    Game game;
-    
-    game.generatePlayers(&pc);
-    
-    int rounds = 1;
-    
-    
-    for (int i = 0; i < rounds; i++)
-    {
-        std::vector<Game::Pair_t> pairs = game.generatePairs();
-        
-        bool interaction = true;
-        while (interaction)
-        {
-            for (int j = 0; j < pairs.size(); j++)
-            {
-                Game::Pair_t pair = pairs.back();
-                
-                
-                Player *prisoner1 = std::get<0>(pair);
-                Player *prisoner2 = std::get<1>(pair);
-                
-                prisoner1->move(prisoner2);
-                prisoner2->move(prisoner1);
-
-//                prisoner1->memory = prisoner1->interaction_history;
-//                prisoner2->memory = prisoner2->interaction_history;
-                
-                
-            }
-            
-            
-            interaction = false;
-        }
-        
-    }
-    
-    
-    
-    
-    
-    
-    
-    std::cout << "Hello, World!\n";
-    return 0;
+  Game game;
+  game.generatePlayers(&pc);
+  
+  int rounds = 1;
+  
+  game.Play(rounds);
+  
+  
+//  std::cout << "Hello, World!\n";
+  return 0;
 }

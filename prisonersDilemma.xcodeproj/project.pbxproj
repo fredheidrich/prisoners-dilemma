@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		B62F9F691F623BC400E4BF66 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62F9F681F623BC400E4BF66 /* main.cpp */; };
-		B62F9F711F623C2E00E4BF66 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62F9F6F1F623C2E00E4BF66 /* Game.cpp */; };
-		B62F9F741F623CBC00E4BF66 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62F9F721F623CBC00E4BF66 /* Player.cpp */; };
-		B62F9F771F62497D00E4BF66 /* Strategy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62F9F751F62497D00E4BF66 /* Strategy.cpp */; };
+		B68D49511F74524100BC6FF6 /* game.cc in Sources */ = {isa = PBXBuildFile; fileRef = B68D494F1F74524000BC6FF6 /* game.cc */; };
+		B68D49561F7452A300BC6FF6 /* player.cc in Sources */ = {isa = PBXBuildFile; fileRef = B68D49541F7452A200BC6FF6 /* player.cc */; };
+		B68D49571F7452A300BC6FF6 /* strategy.cc in Sources */ = {isa = PBXBuildFile; fileRef = B68D49551F7452A300BC6FF6 /* strategy.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,13 +27,13 @@
 
 /* Begin PBXFileReference section */
 		B62F9F651F623BC400E4BF66 /* prisonersDilemma */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = prisonersDilemma; sourceTree = BUILT_PRODUCTS_DIR; };
-		B62F9F681F623BC400E4BF66 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		B62F9F6F1F623C2E00E4BF66 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
-		B62F9F701F623C2E00E4BF66 /* Game.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Game.hpp; sourceTree = "<group>"; };
-		B62F9F721F623CBC00E4BF66 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
-		B62F9F731F623CBC00E4BF66 /* Player.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
-		B62F9F751F62497D00E4BF66 /* Strategy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Strategy.cpp; sourceTree = "<group>"; };
-		B62F9F761F62497D00E4BF66 /* Strategy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Strategy.hpp; sourceTree = "<group>"; };
+		B62F9F681F623BC400E4BF66 /* main.cpp */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; tabWidth = 2; };
+		B68D494F1F74524000BC6FF6 /* game.cc */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = game.cc; sourceTree = "<group>"; tabWidth = 2; };
+		B68D49501F74524000BC6FF6 /* game.h */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; tabWidth = 2; };
+		B68D49521F7452A200BC6FF6 /* player.h */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; tabWidth = 2; };
+		B68D49531F7452A200BC6FF6 /* strategy.h */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = strategy.h; sourceTree = "<group>"; tabWidth = 2; };
+		B68D49541F7452A200BC6FF6 /* player.cc */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = player.cc; sourceTree = "<group>"; tabWidth = 2; };
+		B68D49551F7452A300BC6FF6 /* strategy.cc */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = strategy.cc; sourceTree = "<group>"; tabWidth = 2; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,13 +66,13 @@
 		B62F9F671F623BC400E4BF66 /* prisonersDilemma */ = {
 			isa = PBXGroup;
 			children = (
+				B68D494F1F74524000BC6FF6 /* game.cc */,
+				B68D49501F74524000BC6FF6 /* game.h */,
 				B62F9F681F623BC400E4BF66 /* main.cpp */,
-				B62F9F6F1F623C2E00E4BF66 /* Game.cpp */,
-				B62F9F701F623C2E00E4BF66 /* Game.hpp */,
-				B62F9F721F623CBC00E4BF66 /* Player.cpp */,
-				B62F9F731F623CBC00E4BF66 /* Player.hpp */,
-				B62F9F751F62497D00E4BF66 /* Strategy.cpp */,
-				B62F9F761F62497D00E4BF66 /* Strategy.hpp */,
+				B68D49541F7452A200BC6FF6 /* player.cc */,
+				B68D49521F7452A200BC6FF6 /* player.h */,
+				B68D49551F7452A300BC6FF6 /* strategy.cc */,
+				B68D49531F7452A200BC6FF6 /* strategy.h */,
 			);
 			path = prisonersDilemma;
 			sourceTree = "<group>";
@@ -134,10 +134,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B62F9F771F62497D00E4BF66 /* Strategy.cpp in Sources */,
+				B68D49511F74524100BC6FF6 /* game.cc in Sources */,
+				B68D49561F7452A300BC6FF6 /* player.cc in Sources */,
 				B62F9F691F623BC400E4BF66 /* main.cpp in Sources */,
-				B62F9F711F623C2E00E4BF66 /* Game.cpp in Sources */,
-				B62F9F741F623CBC00E4BF66 /* Player.cpp in Sources */,
+				B68D49571F7452A300BC6FF6 /* strategy.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +266,7 @@
 				B62F9F6E1F623BC400E4BF66 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
