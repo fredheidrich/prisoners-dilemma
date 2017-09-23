@@ -12,7 +12,7 @@
 
 
 void Player::Print() {
-  std::cout << name << ": " << score << std::endl;
+  std::cout << strategy->Name() << ": " << score << std::endl;
 }
 
 
@@ -32,14 +32,10 @@ void Player::Move(Player *opponent) {
 
 
 void Player::Defect() {
-  
   score += 1;
-
 }
 
 void Player::Cooperate(Player *opponent) {
-  
   opponent->score += 3;
   score -= 1;
-  
 }
