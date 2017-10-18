@@ -35,26 +35,24 @@ int main(int argc, const char * argv[]) {
 //
 //  Derived d;
 //  c->a = &d;
-//
 //  c->a->func(); // returns hello
   
   
   
-  Game::PlayerConfig pc = {
+  PlayerConfig cfg = {
       .titfortatcoop = 4,
-      .titfortatdefect = 4,
   };
   
-  // TODO(fred): make sure player num is devidable by 2
-  // we need this for pairing up players two and two
 
   Game game;
-  game.generatePlayers(&pc);
   
-  int rounds = 1;
+  std::vector<Player*> players;
+  game.generatePlayers(cfg, players);
+  
+  int rounds = 100;
   int8_t probability = 75;
   
-  game.Play(rounds, probability);
+  game.play(&players, rounds, probability);
   
   return 0;
 }

@@ -14,42 +14,49 @@
 
 #include "player.h"
 
+struct PlayerConfig
+{
+  int titfortatcoop;
+  int titfortatdefect;
+  int pavlov;
+  int allcooperate;
+  int alldefect;
+  int random;
+  
+};
+
+typedef std::vector<Player*> Players;
+
 class Game
 {
   
-  void Round(int8_t);
+  
   
   void PrintStats();
   
-  std::vector<Player*> population;
+  
   
 public:
   
-  void Play(int, int8_t);
   
-  typedef std::tuple<Player*, Player*> Pair_t;
-  
-  
-  
-  typedef struct Pair {
-    Player *p1;
-    Player *p2;
-  } Pair;
-  
-  
-  typedef struct PlayerConfig
-  {
-    int titfortatcoop;
-    int titfortatdefect;
-    int pavlov;
-    int allcooperate;
-    int alldefect;
-    int random;
     
-  }PlayerConfig;
+  void Round(int8_t);
+    void play(Players*, int, int probability = 0);
   
-  void generatePlayers(PlayerConfig *pc);
-  Pair *generatePairs();
+  std::vector<Player*> population;
+  
+  void Play(int, int8_t);
+
+  
+  void endRound(Players*);
+  
+  
+  void writeStats(std::string, Players*, int);
+  
+  void round(int, Players*);
+  void generatePlayers(PlayerConfig pc, std::vector<Player*>& players);
+  void generatePlayers(PlayerConfig pc);
+
 
 };
 
