@@ -47,26 +47,22 @@ void Player::move(Player& opponent) {
   
   makeDecision(this->strat, opponent.interaction_history, this->memory);
   
-  (this->memory == DEFECT) ? defect() : cooperate(opponent);
+  if (this->memory == DEFECT) {
+    defect();
+    opponent.interaction_history = DEFECT;
+  } else {
+    cooperate(opponent);
+    opponent.interaction_history = COOPERATE;
+  }
   
 }
 
-
-
-void Player::Defect() {
-  score += 1;
-}
 
 void Player::defect() {
   this->score += 1;
 }
 
 void Player::cooperate(Player& opponent) {
-  opponent.score += 3;
+  opponent.score += 4;
   this->score -= 1;
-}
-
-void Player::Cooperate(Player *opponent) {
-  opponent->score += 3;
-  score -= 1;
 }

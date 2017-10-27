@@ -15,15 +15,15 @@
 
 
 PlayerConfig cfg = {
-    .titfortatcoop = 50,
-    .titfortatdefect = 20,
-    .alldefect = 20,
-    .allcooperate = 20,
-    .random = 20,
+    .titfortatcoop = 4,
+    .titfortatdefect = 4,
+    .alldefect = 4,
+    .allcooperate = 4,
+    .random = 4,
 };
 
 
-int rounds = 300;
+int rounds = 100;
 int8_t probability = 75;
 int8_t crisisChance = 1;
 
@@ -31,7 +31,7 @@ int crisisPenalty = 0;
 bool inCrisis = false;
 int endCrisis = 50;
 std::string filename = "file1.tsv";
-bool lifeAndDeath = false;
+bool lifeAndDeath = true;
 
 
 static void dump(std::vector<Player*> *players) {
