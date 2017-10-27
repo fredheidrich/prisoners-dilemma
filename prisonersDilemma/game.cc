@@ -14,24 +14,117 @@
 #include <cstdio>
 
 
+PlayerConfig cfg = {
+    .titfortatcoop = 50,
+    .titfortatdefect = 20,
+    .alldefect = 20,
+    .allcooperate = 20,
+    .random = 20,
+};
 
 
-void Game::writeStats(std::string filename, Players* players, int round) {
+int rounds = 300;
+int8_t probability = 75;
+int8_t crisisChance = 1;
+
+int crisisPenalty = 0;
+bool inCrisis = false;
+int endCrisis = 50;
+std::string filename = "file1.tsv";
+bool lifeAndDeath = false;
+
+
+static void dump(std::vector<Player*> *players) {
+  std::vector<Player*>::iterator it;
+  Player *p;
+  
+  for (it = players->begin(); it != players->end(); ++it) {
+    p = *it;
+    p->Print();
+  }
+}
+
+//#include <sys/stat.h>
+//
+//inline bool _exists (const std::string& name) {
+//  struct stat buffer;
+//  return (stat (name.c_str(), &buffer) == 0);
+//}
+
+static void writeHeader() {
+  FILE* fout = fopen(filename.c_str(), "a");
+  fprintf(fout, "====================\n");
+    fprintf(fout, "ttc: %d\nttd: %d\ndef: %d\ncoop: %d\nRnd: %d\n",
+          cfg.titfortatcoop,
+          cfg.titfortatdefect,
+          cfg.alldefect,
+          cfg.allcooperate,
+          cfg.random);
+  fprintf(fout, "====================\n");
+  fprintf(fout, "Round\tPlayer\tScore\tStrategy ID\tCrisis\n");
+  fclose(fout);
+}
+
+void Game::writeStats(Players* players, int round) {
   
   FILE* fout = fopen(filename.c_str(), "a");
   
   // header
-  fprintf(fout, "Round\tPlayer\tScore\n");
-  for (Players::const_iterator it = players->begin(); it != players->end(); ++it) {
+//  fprintf(fout, "Round\tPlayer\tScore\n");
+  for (Players::iterator it = players->begin(); it != players->end(); ++it) {
     Player* p = static_cast<Player*>(*it);
-    fprintf(fout, "%d\t%d\t%d\n", round, p->ID, p->score);
+    fprintf(fout, "%d\t%d\t%d\t%d\t%d\n", round, p->ID, p->score, p->strat, inCrisis);
+//    std::cout << p->ID << " and " << p->score << "\n";
   }
   fclose(fout);
 }
 
 
-void Game::play(Players* players, int rounds, int probability) {
+static void printPopulation(std::vector<Player*> *players) {
     
+    int cttc = 0;
+    int cttd = 0;
+    int cdef = 0;
+    int ccoop = 0;
+    int crnd = 0;
+    
+    for (std::vector<Player*>::iterator it = players->begin(); it != players->end(); ++it) {
+     
+        switch (static_cast<Player*>(*it)->strat) {
+            case ttc: cttc += 1; break;
+            case ttd: cttd += 1; break;
+            case def: cdef += 1; break;
+            case coop: ccoop += 1; break;
+            case rnd: crnd += 1; break;
+        }
+    }
+    
+    FILE* fout = fopen(filename.c_str(), "a");
+    fprintf(fout, "====================\n");
+    fprintf(fout, "ttc: %d\nttd: %d\ndef: %d\ncoop: %d\nRnd: %d\n",
+            cttc,
+            cttd,
+            cdef,
+            ccoop,
+            crnd);
+    fclose(fout);
+        
+}
+
+void wipeMemory(Players *players) {
+    for (std::vector<Player*>::iterator it = players->begin(); it != players->end(); ++it) {
+        
+        static_cast<Player*>(*it)->interaction_history = NONE;
+        static_cast<Player*>(*it)->memory = NONE;
+        
+    }
+}
+
+void Game::play(Players* players) {
+  
+    
+    writeHeader();
+  
     // Random generator
     std::random_device rd;
     std::uniform_int_distribution<int> distribution(1, 100);
@@ -44,20 +137,35 @@ void Game::play(Players* players, int rounds, int probability) {
         bool reinteraction = false;
         while (!reinteraction) {
             
-            round(probability, players);
+            round(players);
             
             reinteraction = (value <= probability);
             value = distribution(engine);
         }
+        
+        if (inCrisis) {
+            // chance to end crisis
+            int crisis = distribution(engine);
+            inCrisis = (crisis <= endCrisis);
+        } else {
+            // chance to start crisis
+            int crisis = distribution(engine);
+            inCrisis = (crisis <= crisisChance);
+        }
       
       
-      endRound(players);
+        if (lifeAndDeath) {
+            endRound(players);
+        }
+        
+        wipeMemory(players);
       
-      writeStats("test.tsv", players, i);
+      
+      writeStats(players, i);
     }
   
-  
-//    PrintStats();
+    dump(players);
+    printPopulation(players);
   
 }
 
@@ -67,23 +175,32 @@ void Game::endRound(Players* players) {
   players->reserve(players->size() * 2);
   int newborns = 0;
   
+  std::vector<Player**> graveyard;
+//    Players newPlayers;
+  
   for (std::vector<Player*>::iterator it = players->begin(); it != players->end();) {
 
       Player* p = static_cast<Player*>(*it);
-
+      
       if (p->score < 0) {
-        players->erase(it);
-        delete *it;
-      }else if (p->score > 100) {
+//        delete *it;
+//          graveyard.push_back(&*it);
+          delete *it;
+          it = players->erase(it);
+//          ++it;
+//        players->erase(it);
+//        graveyard.push_back(*it);
+      } else if (p->score > 100) {
 
-        newborns += 1;
+          newborns += 1;
           Player *new_born = new Player(p->strat);
 
           int new_score = p->score / 2;
           p->score = new_score;
           new_born->score = new_score;
         
-        players->push_back(p);
+//          newPlayers.push_back(new_born);
+        players->push_back(new_born);
 //        ++it;
       } else {
         ++it;
@@ -96,59 +213,13 @@ void Game::endRound(Players* players) {
     std::vector<Player*> sub(start, end);
     players = &sub;
   }
-}
-
-
-
-// Main Game loop
+    
+//    for (std::vector<Player**>::iterator it = graveyard.begin(); it != graveyard.end(); ++it) {
 //
-// # Arguments
-//   int rounds : number of rounds to play the game
-void Game::Play(int rounds, int8_t probability = 0) {
-  
-  // Random generator
-  std::random_device rd;
-  std::uniform_int_distribution<int> distribution(1, 100);
-  std::mt19937 engine(rd()); // Mersenne twister MT19937
-  
-  for (int i = 0; i < rounds; i++) {
-    
-    int value = distribution(engine);
-    
-    bool reinteraction = false;
-    while (!reinteraction) {
-    
-      Round(probability);
-      
-      reinteraction = (value <= probability);
-      value = distribution(engine);
-    }
-    
-    // end of the round
-    for (std::vector<Player*>::iterator it = this->population.begin(); it != population.end(); ++it) {
-      
-      Player* p = static_cast<Player*>(*it);
-      
-      if (p->score < 0) {
-        population.erase(it);
-      } else if (p->score > 100) {
-       
-        Player *pl = new Player;
-        pl->strategy = p->strategy;
-        
-        int new_score = p->score / 2;
-        p->score = new_score;
-        pl->score = new_score;
-        
-      }
-      
-    }
-    
-    
-  }
-  
-  PrintStats();
-  
+//        delete **it;
+//        players->erase(*it); // static_cast<Player*>(*it);
+//
+//    }
 }
 
 
@@ -163,7 +234,7 @@ void Game::PrintStats() {
 }
 
 
-void Game::round(int probability, Players* players)
+void Game::round(Players* players)
 {
   std::random_shuffle(players->begin(), players->end());
   
@@ -179,67 +250,47 @@ void Game::round(int probability, Players* players)
         p1->move(*p2);
         p2->move(*p1);
         
+        if (inCrisis) {
+            p1->score -= crisisPenalty;
+            p2->score -= crisisPenalty;
+        }
+        
     }
     
   }
   
 }
 
-void Game::Round(int8_t probability)
-{
-  std::random_shuffle(population.begin(), population.end());
-//  const long num_pairs = population.size() / 2;
-
-//  Player *p1;
-//  Player *p2;
-  
-  // Make pairs
-  ;
-  for (std::vector<Player*>::iterator it = population.begin(); it != population.end(); ++it) {
-    
-    Player *p1 = static_cast<Player*>(*it);
-//    p1 = *it++;
-//    p2 = *it++;
-
-//    p1->Move(p2);
-//    p2->Move(p1);
-  
-  }
-  
-}
 
 
-void Game::generatePlayers(PlayerConfig cfg, std::vector<Player*>& players) {
+void Game::generatePlayers(std::vector<Player*>& players) {
   
   for (int i = 0; i < cfg.titfortatcoop; ++i) {
-    
     Player *pl = new Player(ttc);
-  
     players.push_back(pl);
     
   }
   
-}
-
-
-void Game::generatePlayers(PlayerConfig pc) {
-
-  for (int i = 0; i < pc.titfortatcoop; ++i) {
-    Player *pl = new Player;
-    TitForTatCoop *st = new TitForTatCoop;
-    pl->strategy = st;
-
-    population.push_back(pl);
-    
+  for (int i = 0; i < cfg.titfortatdefect; ++i) {
+    Player *pl = new Player(ttd);
+    players.push_back(pl);
   }
   
-  for (int i = 0; i < pc.titfortatdefect; ++i) {
-    Player *pl = new Player;
-    TitForTatDefect *st = new TitForTatDefect;
-    pl->strategy = st;
-    
-    population.push_back(pl);
-    
+  for (int i = 0; i < cfg.alldefect; ++i) {
+    Player *pl = new Player(def);
+    players.push_back(pl);
+  }
+  
+  for (int i = 0; i < cfg.allcooperate; ++i) {
+    Player *pl = new Player(coop);
+    players.push_back(pl);
   }
     
+    for (int i = 0; i < cfg.random; ++i) {
+        Player *pl = new Player(rnd);
+        players.push_back(pl);
+    }
+  
 }
+
+

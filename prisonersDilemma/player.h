@@ -15,11 +15,14 @@
 
 
 
-
 enum Strat {
   ttc = 0,
   ttd,
+  def,
+  coop,
+  rnd,
 };
+
 
 static int num_id;
 
@@ -28,18 +31,18 @@ class Player {
   void Cooperate(Player*);
 public:
   
-  
-    Player(): strat(ttc), ID(num_id++), memory(NONE), interaction_history(NONE) {};
+
   Player(Strat s):
-    strat(s), score(0), ID(num_id++), memory(NONE), interaction_history(NONE) {};
+    strat(s), score(50), ID(num_id++), memory(NONE), interaction_history(NONE) {};
   ~Player() {
-    std::cout << "Player " << ID << " destroyed\n";
+//    std::cout << "Player " << ID << " destroyed\n";
   };
   
   const int ID;
   
     void makeDecision(Strat, Interaction, Interaction&);
     void cooperate(Player&);
+    void defect();
     
   void Print();
   void Move(Player*);
@@ -49,7 +52,6 @@ public:
   Interaction interaction_history;
   
   int score;
-  Strategy *strategy;
   Strat strat;
 
 };

@@ -9,11 +9,14 @@
 #include <iostream>
 
 #include "player.h"
+#include <random>
 
-
+std::random_device rd;
+std::uniform_int_distribution<int> distribution(1, 100);
+std::mt19937 engine(rd()); // Mersenne twister MT19937
 
 void Player::Print() {
-  std::cout << strategy->Name() << ": " << score << std::endl;
+  std::cout << "ID: "<< this->ID << ": " << score << "\n";
 }
 
 void Player::makeDecision(Strat strat, Interaction opponent_hist, Interaction& my_interaction) {
@@ -22,7 +25,18 @@ void Player::makeDecision(Strat strat, Interaction opponent_hist, Interaction& m
     case ttc:
       my_interaction = (opponent_hist == DEFECT) ? DEFECT : COOPERATE;
       break;
-    default:
+    case ttd:
+      my_interaction = (opponent_hist == COOPERATE) ? COOPERATE : DEFECT;
+      break;
+    case def:
+      my_interaction = DEFECT;
+      break;
+    case coop:
+      my_interaction = COOPERATE;
+      break;
+    case rnd:
+      int rnd = distribution(engine);
+      my_interaction = (rnd <= 50) ? COOPERATE : DEFECT;
       break;
   }
 
@@ -33,27 +47,18 @@ void Player::move(Player& opponent) {
   
   makeDecision(this->strat, opponent.interaction_history, this->memory);
   
-  (opponent.interaction_history == DEFECT) ? Defect() : cooperate(opponent);
+  (this->memory == DEFECT) ? defect() : cooperate(opponent);
   
 }
 
-void Player::Move(Player *opponent) {
-  
-  opponent->interaction_history = strategy->decision(opponent->interaction_history);
-  
-  (opponent->interaction_history == DEFECT) ? Defect() : Cooperate(opponent);
-  
-//  if (opponent->interaction_history == DEFECT) {
-//    defect();
-//  }
-//  else if (opponent->interaction_history == COOPERATE) {
-//    cooperate(opponent);
-//  }
-}
 
 
 void Player::Defect() {
   score += 1;
+}
+
+void Player::defect() {
+  this->score += 1;
 }
 
 void Player::cooperate(Player& opponent) {

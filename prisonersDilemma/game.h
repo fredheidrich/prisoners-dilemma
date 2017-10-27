@@ -40,22 +40,22 @@ public:
   
   
     
-  void Round(int8_t);
-    void play(Players*, int, int probability = 0);
+//  void Round(int8_t);
+    void play(Players*);
   
   std::vector<Player*> population;
   
-  void Play(int, int8_t);
+//  void Play(int, int8_t);
 
   
   void endRound(Players*);
   
   
-  void writeStats(std::string, Players*, int);
+  void writeStats(Players*, int);
   
-  void round(int, Players*);
-  void generatePlayers(PlayerConfig pc, std::vector<Player*>& players);
-  void generatePlayers(PlayerConfig pc);
+  void round(Players*);
+  void generatePlayers(std::vector<Player*>& players);
+//  void generatePlayers(PlayerConfig pc);
 
 
 };

@@ -39,20 +39,24 @@ int main(int argc, const char * argv[]) {
   
   
   
-  PlayerConfig cfg = {
-      .titfortatcoop = 4,
-  };
-  
+//  PlayerConfig cfg = {
+//      .titfortatcoop = 4,
+//      .titfortatdefect = 4,
+//      .alldefect = 4,
+//      .allcooperate = 4,
+//  };
+//
 
   Game game;
   
   std::vector<Player*> players;
-  game.generatePlayers(cfg, players);
+  game.generatePlayers(players);
   
-  int rounds = 100;
-  int8_t probability = 75;
+//  int rounds = 100;
+//  int8_t probability = 75;
+//  int8_t crisisChance = 50;
   
-  game.play(&players, rounds, probability);
+  game.play(&players);
   
   return 0;
 }
