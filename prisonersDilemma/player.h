@@ -33,7 +33,7 @@ public:
   
 
   Player(Strat s):
-    strat(s), score(50), ID(num_id++), memory(NONE), interaction_history(NONE) {};
+    strat(s), score(50), ID(num_id++), myInteractionThisRound(NONE), opponentsInteractionLastRound(NONE) {};
   ~Player() {
 //    std::cout << "Player " << ID << " destroyed\n";
   };
@@ -41,15 +41,16 @@ public:
   const int ID;
   
     void makeDecision(Strat, Interaction, Interaction&);
-    void cooperate(Player&);
+    void cooperateWith(Player&);
     void defect();
     
   void Print();
   void Move(Player*);
   void move(Player&);
 
-  Interaction memory;
-  Interaction interaction_history;
+  Interaction myInteractionThisRound;
+  Interaction opponentsInteractionLastRound;
+  int against;
   
   int score;
   Strat strat;

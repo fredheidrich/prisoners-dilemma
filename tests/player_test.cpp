@@ -23,7 +23,7 @@ TEST_CASE("Player tests", "[player]") {
     
     REQUIRE(p1.score != 0);
     REQUIRE(p2.score != 0);
-    REQUIRE(p1.memory == COOPERATE);
+    REQUIRE(p1.myInteractionThisRound == COOPERATE);
     REQUIRE(p2.memory == NONE);
     
     p2.move(p1);

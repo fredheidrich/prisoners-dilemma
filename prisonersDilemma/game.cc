@@ -13,27 +13,30 @@
 
 #include <cstdio>
 
-
+// Number of players
 PlayerConfig cfg = {
-    .titfortatcoop = 4,
+    .titfortatcoop = 8,
     .titfortatdefect = 4,
     .alldefect = 4,
     .allcooperate = 4,
     .random = 4,
 };
 
-
+// Parameters
 int rounds = 100;
 int8_t probability = 75;
 int8_t crisisChance = 1;
 
 int crisisPenalty = 0;
-bool inCrisis = false;
 int endCrisis = 50;
-std::string filename = "file1.tsv";
 bool lifeAndDeath = true;
 
+// Settings
+std::string filename = "file2.tsv";
 
+
+// Global vars
+bool inCrisis = false;
 static void dump(std::vector<Player*> *players) {
   std::vector<Player*>::iterator it;
   Player *p;
@@ -114,8 +117,8 @@ static void printPopulation(std::vector<Player*> *players) {
 void wipeMemory(Players *players) {
     for (std::vector<Player*>::iterator it = players->begin(); it != players->end(); ++it) {
         
-        static_cast<Player*>(*it)->interaction_history = NONE;
-        static_cast<Player*>(*it)->memory = NONE;
+        static_cast<Player*>(*it)->opponentsInteractionLastRound = NONE;
+        static_cast<Player*>(*it)->myInteractionThisRound = NONE;
         
     }
 }
@@ -136,6 +139,11 @@ void Game::play(Players* players) {
         
         bool reinteraction = false;
         while (!reinteraction) {
+            
+            // shuffle players if this is not a reinteraction
+            if (!reinteraction) {
+                std::random_shuffle(players->begin(), players->end());
+            }
             
             round(players);
             
@@ -175,21 +183,15 @@ void Game::endRound(Players* players) {
   players->reserve(players->size() * 2);
   int newborns = 0;
   
-  std::vector<Player**> graveyard;
-//    Players newPlayers;
+//  std::vector<Player**> graveyard;
   
   for (std::vector<Player*>::iterator it = players->begin(); it != players->end();) {
 
       Player* p = static_cast<Player*>(*it);
       
       if (p->score < 0) {
-//        delete *it;
-//          graveyard.push_back(&*it);
           delete *it;
           it = players->erase(it);
-//          ++it;
-//        players->erase(it);
-//        graveyard.push_back(*it);
       } else if (p->score > 100) {
 
           newborns += 1;
@@ -199,9 +201,7 @@ void Game::endRound(Players* players) {
           p->score = new_score;
           new_born->score = new_score;
         
-//          newPlayers.push_back(new_born);
         players->push_back(new_born);
-//        ++it;
       } else {
         ++it;
       }
@@ -213,51 +213,50 @@ void Game::endRound(Players* players) {
     std::vector<Player*> sub(start, end);
     players = &sub;
   }
-    
-//    for (std::vector<Player**>::iterator it = graveyard.begin(); it != graveyard.end(); ++it) {
-//
-//        delete **it;
-//        players->erase(*it); // static_cast<Player*>(*it);
-//
-//    }
-}
-
-
-void Game::PrintStats() {
-  std::vector<Player*>::iterator it;
-  Player *p;
-  
-  for (it = population.begin(); it != population.end(); ++it) {
-    p = *it;
-    p->Print();
-  }
 }
 
 
 void Game::round(Players* players)
 {
-  std::random_shuffle(players->begin(), players->end());
+    // shuffle players
+//    std::random_shuffle(players->begin(), players->end());
   
-  for (std::vector<Player*>::iterator it = players->begin(); it != players->end(); ++it) {
+    for (std::vector<Player*>::iterator it = players->begin(); it != players->end(); ++it) {
     
-      Player *p1 = nullptr;
-      Player *p2 = nullptr;
+        Player *p1 = nullptr;
+        Player *p2 = nullptr;
     
-    if ((it + 1) != players->end()) {
-        p1 = static_cast<Player*>(*it);
-        p2 = static_cast<Player*>(*(++it));  // next
+        if ((it + 1) != players->end()) {
+            // cast reference to players
+            // two and two
+            p1 = static_cast<Player*>(*it);
+            p2 = static_cast<Player*>(*(++it));  // next player
       
-        p1->move(*p2);
-        p2->move(*p1);
+            p1->move(*p2);
+            p2->move(*p1);
         
-        if (inCrisis) {
-            p1->score -= crisisPenalty;
-            p2->score -= crisisPenalty;
+            // set memory
+            if (p1->myInteractionThisRound == DEFECT) {
+                p2->opponentsInteractionLastRound = DEFECT;
+            } else {
+                p2->opponentsInteractionLastRound = COOPERATE;
+            }
+        
+            if (p2->myInteractionThisRound == DEFECT) {
+                p1->opponentsInteractionLastRound = DEFECT;
+            } else {
+                p1->opponentsInteractionLastRound = COOPERATE;
+            }
+        
+            // apply penalty if we are in crisis
+            if (inCrisis) {
+                p1->score -= crisisPenalty;
+                p2->score -= crisisPenalty;
+            }
+        
         }
-        
-    }
     
-  }
+    }
   
 }
 

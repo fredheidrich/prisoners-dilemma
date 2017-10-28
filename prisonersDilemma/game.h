@@ -29,33 +29,19 @@ typedef std::vector<Player*> Players;
 
 class Game
 {
-  
-  
-  
-  void PrintStats();
-  
-  
-  
+
 public:
   
-  
-    
-//  void Round(int8_t);
     void play(Players*);
   
   std::vector<Player*> population;
   
-//  void Play(int, int8_t);
-
-  
   void endRound(Players*);
-  
   
   void writeStats(Players*, int);
   
   void round(Players*);
   void generatePlayers(std::vector<Player*>& players);
-//  void generatePlayers(PlayerConfig pc);
 
 
 };

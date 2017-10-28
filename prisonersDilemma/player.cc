@@ -19,40 +19,36 @@ void Player::Print() {
   std::cout << "ID: "<< this->ID << ": " << score << "\n";
 }
 
-void Player::makeDecision(Strat strat, Interaction opponent_hist, Interaction& my_interaction) {
-  
-  switch (strat) {
-    case ttc:
-      my_interaction = (opponent_hist == DEFECT) ? DEFECT : COOPERATE;
-      break;
-    case ttd:
-      my_interaction = (opponent_hist == COOPERATE) ? COOPERATE : DEFECT;
-      break;
-    case def:
-      my_interaction = DEFECT;
-      break;
-    case coop:
-      my_interaction = COOPERATE;
-      break;
-    case rnd:
-      int rnd = distribution(engine);
-      my_interaction = (rnd <= 50) ? COOPERATE : DEFECT;
-      break;
-  }
-
-}
-
 
 void Player::move(Player& opponent) {
   
-  makeDecision(this->strat, opponent.interaction_history, this->memory);
+  this->against = opponent.ID;
   
-  if (this->memory == DEFECT) {
-    defect();
-    opponent.interaction_history = DEFECT;
+  // make decision based on strategy
+  switch (strat) {
+    case ttc:
+      this->myInteractionThisRound = (this->opponentsInteractionLastRound == DEFECT) ? DEFECT : COOPERATE;
+      break;
+    case ttd:
+      this->myInteractionThisRound = (this->opponentsInteractionLastRound == COOPERATE) ? COOPERATE : DEFECT;
+      break;
+    case def:
+      this->myInteractionThisRound = DEFECT;
+      break;
+    case coop:
+      this->myInteractionThisRound = COOPERATE;
+      break;
+    case rnd:
+      int rnd = distribution(engine);
+      this->myInteractionThisRound = (rnd <= 50) ? COOPERATE : DEFECT;
+      break;
+  }
+  
+  // take action
+  if (this->myInteractionThisRound == DEFECT) {
+    this->defect();
   } else {
-    cooperate(opponent);
-    opponent.interaction_history = COOPERATE;
+    this->cooperateWith(opponent);
   }
   
 }
@@ -62,7 +58,7 @@ void Player::defect() {
   this->score += 1;
 }
 
-void Player::cooperate(Player& opponent) {
+void Player::cooperateWith(Player& opponent) {
   opponent.score += 4;
   this->score -= 1;
 }
